@@ -1,0 +1,31 @@
+
+<div>
+<a href="/">home</a><br>
+{% assign collection = site[page.collection] %}
+
+{% for i in collection %}
+    {% if page.url == i.url %}
+            {% assign pageIndex = forloop.index %}
+    {% endif %}
+{% endfor %}
+
+<!--Left arrow-->
+{% assign previous = pageIndex | minus: 2 %}
+{% if page.url != collection[0].url %}
+    <a id="leftarrow" href="{{collection[previous].url}}">« previous</a>
+{% endif %}
+
+<!--Display numbers-->
+{% for i in collection %}
+    {% if pageIndex == forloop.index %}
+        [{{forloop.index}}]
+    {% else %}
+        <a href="{{i.url}}">{{forloop.index}}</a>
+    {% endif %}
+{% endfor %}
+
+<!--Right arrow-->
+{% if page.url != collection.last.url %}
+<a id="rightarrow" href="{{collection[pageIndex].url}}">next »</a>
+{% endif %}
+</div>
