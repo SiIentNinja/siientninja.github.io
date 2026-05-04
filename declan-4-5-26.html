@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>essay player</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
+    <link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1/normalize.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/pell/dist/pell.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+  </head>
+  <body>
+ <div id="bg">   
+    
+        <h1>A typing powered <br class="break">music player.</h1>
+  <div class="settings">
+    
+    
+    <form id="url" accept-charset="utf-8">
+      <span data-tooltip="Passive energy bar decrease">Decline speed </span><input type="range" min="0" max="1" value="0.25" id="slider" step="0.05"><br>
+      <input type="url" id="text" value="https://www.youtube.com/watch?v=7tTVYfgDf6g" required />
+      <button type="submit">ok</button>
+    </form>
+    <input type="checkbox" id="exam"/><label for="exam" class="checkable" title="source: Confusing Exam Room Noise ASMR - Soom Sound (youtube)">Exam noise</label>
+    <input type="checkbox" id="darkmode" checked/><label for="darkmode" class="checkable">Dark mode</label>
+    
+  </div>
+
+<div class="view">
+    <div id="yt"></div>
+    <img id="placeholder" src="https://placehold.co/160x90?text=Load+video" alt="placeholder image" />
+</div>
+
+</div>
+
+
+<div id="main">
+<div id="essay" class="pell" rows="20" placeholder="Start writing…">
+<div class="lines"></div>
+</div>
+
+<div class="barbox">
+  <div id="bar">
+  </div>
+</div>
+
+</div>
+
+<div id="examnoise" style="display: none"></div>
+<div id="foo" style="display: none"></div>
+
+
+<style type="text/css" media="all">
+:root {
+  --text-color: white;
+  --background-color: rgb(33, 33, 33);
+  --header-color: rgb(55, 89, 120);
+  --body-color: rgb(45, 60, 84);
+  --font-family: Calibri;
+  --line-color: rgba(255, 255, 255, 0.12)
+}
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial;
+  color: var(--text-color);
+  background-color: var(--header-color);
+}
+h1 {
+  margin: 0;
+  padding: 0 0 5px;
+  line-height: 40px;
+}
+  #essay {
+    width: auto;
+    resize: none;
+    height: 100%;
+    flex-grow: 1;
+    background-color: var(--background-color);
+    border-radius: 4px;
+    padding-top: 0;
+    overflow-y: auto;
+  }
+  #essay::-webkit-scrollbar {
+  width: 8px;
+}
+  #essay::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+#essay::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.4);
+  border-radius: 4px;
+}
+.pell-content {
+  max-width: 1000px;
+  margin-inline: auto;
+  padding-top: 6px;
+  padding-inline: max(1ch, calc((100vw - 1000px) / 2));
+  /*min-height: 100%;*/
+  overflow: visible;
+  /*position: relative;*/
+  /*z-index: 0;*/
+  
+    /*min-height: 100%;*/
+  /*max-width: 1000px;*/
+  /*margin-inline: auto;*/
+  /*padding-top: 6px;*/
+  /*padding-inline: max(1ch, calc((100vw - 1000px) / 2));*/
+  min-height: 100%;
+  /*background-attachment: local;*/
+  background-position: 0 0px;
+  background-size: 100% 1.5em;
+  background-image: 
+  linear-gradient(
+    to bottom,
+    transparent 1.4em,
+    var(--line-color) 1.4em
+  );
+  background-clip: content-box;
+  background-repeat: repeat-y;
+}
+/*.pell-content::before {*/
+/*  content: "";*/
+  /*display: block;*/
+/*  position: absolute;*/
+/*  z-index: -1;*/
+/*  inset: 0;*/
+
+/*}*/
+.pell-content * {
+  font-family: var(--font-family) !important;
+  font-size: 1em !important;
+}
+.pell-actionbar {
+  display: none;
+}
+  /*.lines {*/
+  /*  background-attachment: local;*/
+  /*  background-sposition: 0 0px;*/
+  /*  background-size: 100% 1.5em;*/
+  /*  background-image: */
+  /*  linear-gradient(*/
+  /*    to bottom,*/
+  /*    transparent 1.4em,*/
+  /*    rgba(0, 0, 0, 0.12) 1.4em*/
+  /*  );*/
+  /*}*/
+  
+  #bg {
+    padding:10px 10px 0;
+    background-color: var(--header-color);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: fixed;
+    width: 100%;
+  }
+  .view * {
+    display: none;
+    float: right;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    height: 90px;
+  }
+  #placeholder {
+    display: block;
+  }
+  .settings {
+    line-height: 30px;
+    position: relative;
+    top: -20px
+  }
+  #main {
+    padding: 13px;
+    height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    column-gap: 8px;
+    box-shadow: 0 -10px 10px -5px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+    background-color: var(--body-color);
+  }
+  .barbox {
+    height: 100%;
+    width: 13px;
+    background-color: rgb(33, 33, 33);
+    display: flex;
+  }
+  #bar {
+    align-self: end;
+    width: 100%;
+    background-color: rgb(147, 172, 207);
+    height: 0%;
+  }
+  #slider {
+    width: 160px;
+    position: relative;
+    top: 14px;
+    margin: 0;
+    padding: 0
+  }
+  .break {
+      display: none;
+  }
+  #text {
+    color: black;
+    width: 220px;
+  }
+  @media (min-width: 768px){
+    .break {
+      display: inline;
+    }
+    #placeholder {
+      margin-bottom: 0px;
+    }
+  }
+</style>
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script src="https://unpkg.com/pell/dist/pell.min.js"></script>
+<script>
+const STORAGEKEY = "pell-editor-text";
+const editor = pell.init({
+  element: document.getElementById('essay'),
+  onChange: html => {
+    document.getElementById('foo').textContent = html;
+    localStorage.setItem(STORAGEKEY, html);
+  },
+  actions: [],
+  classes: {
+    content: 'pell-content',
+    actionbar: 'pell-actionbar',
+  }
+});
+
+//fetch saved data if exist
+const storedtext = localStorage.getItem(STORAGEKEY)
+if (storedtext) {
+  editor.content.innerHTML = storedtext;
+}
+
+</script>
+<script>
+let player;
+let examplayer;
+  
+function onYouTubeIframeAPIReady() {
+  
+player = new YT.Player('yt', {
+                height: '90',
+                width: '160',
+                videoId: '',
+		playerVars: {
+    		    'origin': window.location.origin,
+    		    'widget_referrer': window.location.origin,
+            'playsinline': 1,
+            'controls': 0,
+            'modestbranding': 1
+  		},
+                events: {
+                    'onError': onPlayerError
+                }
+            });
+            
+
+examplayer = new YT.Player('examnoise', {
+                height: '90',
+                width: '160',
+                videoId: 'A0iHLgaxHlU',
+		playerVars: {
+    		    'origin': window.location.origin,
+    		    'widget_referrer': window.location.origin,
+            'playsinline': 1,
+            'controls': 0,
+            'modestbranding': 1,
+            'autoplay': 1,
+            'loop': 1,
+            'playlist': 'A0iHLgaxHlU'
+  		},
+                // events: {
+                //     'onReady': onPlayerReady
+                // }
+            });
+};
+
+// function onPlayerReady(event) { 
+//   player.playVideo() // Start play the video automatically when ready 
+// }
+function onPlayerError(event) {
+  document.getElementById("placeholder").src = `https://placehold.co/160x90?text=Invalid+URL`;
+}
+
+if (window.YT && window.YT.Player && !player) {
+  onYouTubeIframeAPIReady();
+}
+
+
+document.getElementById("url").addEventListener("submit", loadVideo);
+  
+function loadVideo(event) {
+  event.preventDefault();
+  let url = new URL(document.getElementById("text").value.trim());
+  let videoId;
+  
+  if (url.hostname.endsWith("youtube.com")) {
+    if (url.searchParams.has("v")) {
+      videoId = url.searchParams.get("v");
+    } else {
+      return;
+    }
+  } else {
+    console.log(`not youtube ${url}`);
+    return;
+  }
+  
+  player.loadVideoById(videoId);
+  document.getElementById("placeholder").src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+}
+
+
+let loop = setInterval(check, 500 / 5);
+let chars;// = document.getElementById("essay").value.length;
+let charchange = 0;
+const hpbar = document.getElementById("bar");
+let hp = 0;
+let hpdisplay;
+let pelldiv;
+
+function check() {
+  pelldiv = document.getElementById("essay").textContent || '';
+  charchange = pelldiv.length - chars;
+  chars = pelldiv.length;
+  if (charchange > 0 && hp < 20) {
+  hp += charchange / 3;
+  }
+  
+  hpdisplay = Math.min(hp / 20 , 1)
+  hpbar.style.height = `${hpdisplay * 100}%`;
+  
+  if (hp > 0) {
+  hp -= document.getElementById("slider").value / 5;
+  if (hp < 0) {
+    hp = 0
+  }
+  player.playVideo();
+  player.setPlaybackRate((hpdisplay * 75 + 25) / 100);
+  player.setVolume(hpdisplay * 100);
+  } else {
+    if (player && typeof player.pauseVideo === "function") {
+    player.pauseVideo();
+    }
+  }
+  
+  if (hp === 1 || !document.getElementById("exam").checked) {
+    if (examplayer && typeof examplayer.pauseVideo === "function") {
+    examplayer.pauseVideo();
+    }
+  } else {
+    examplayer.playVideo();
+    examplayer.setVolume((1-hpdisplay) * 100);
+  }
+  
+}
+
+const root = document.documentElement;
+document.getElementById("darkmode").addEventListener("change", changeTheme);
+
+function changeTheme() {
+  if (document.getElementById("darkmode").checked) {
+    root.style.setProperty('--text-color', 'white');
+    root.style.setProperty('--background-color', 'rgb(33, 33, 33)');
+    root.style.setProperty('--header-color', 'rgb(55, 89, 120)');
+    root.style.setProperty('--body-color', 'rgb(45, 60, 84)');
+    root.style.setProperty('--font-family', 'Calibri');
+    root.style.setProperty('--line-color', 'rgba(255, 255, 255, 0.12)');
+    // document.getElementById("essay").classList.remove("lines")
+  } else {
+    root.style.setProperty('--text-color', 'black');
+    root.style.setProperty('--background-color', '#fafafa');
+    root.style.setProperty('--header-color', 'white');
+    root.style.setProperty('--body-color', 'rgb(82, 144, 199)');
+    root.style.setProperty('--font-family', '"Patrick Hand", cursive');
+    root.style.setProperty('--line-color', 'rgba(0, 0, 0, 0.12)');
+    // document.getElementById("essay").classList.add("lines")
+  }
+}
+
+window.addEventListener("resize", shiftMain);
+let main = document.getElementById("main");
+main.style.top = `${document.getElementById("bg").offsetHeight - 1}px`;
+
+function shiftMain() {
+  main.style.top = `${document.getElementById("bg").offsetHeight - 1}px`;
+}
+
+</script>
+  </body>
+</html>
